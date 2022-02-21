@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ffo32167/test2/internal"
-	"github.com/ffo32167/test2/internal/http"
-	"github.com/ffo32167/test2/internal/remoteDB"
+	"github.com/ffo32167/cities/internal"
+	"github.com/ffo32167/cities/internal/http"
+	"github.com/ffo32167/cities/internal/remoteDB"
 	"go.uber.org/zap"
 	"os"
 	"time"

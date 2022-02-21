@@ -1,8 +1,8 @@
 package http
 
 import (
-	"github.com/ffo32167/test2/internal"
-	"github.com/ffo32167/test2/internal/http/cityHandler"
+	"github.com/ffo32167/cities/internal"
+	"github.com/ffo32167/cities/internal/http/cityHandler"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 	"net/http"

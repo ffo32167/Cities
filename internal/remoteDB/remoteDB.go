@@ -2,7 +2,7 @@ package remoteDB
 
 import (
 	"context"
-	"github.com/ffo32167/test2/internal"
+	"github.com/ffo32167/cities/internal"
 	"time"
 )
 
