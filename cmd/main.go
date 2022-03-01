@@ -28,7 +28,7 @@ func main() {
 
 	rdb := remoteDB.New(1 * time.Second)
 	ctx, _ := context.WithCancel(context.TODO()) //cancel нужно будет добавить только при обвязке завершения программы os.Signal и всё вот это вот
-	reqChan := make(chan internal.CityReq, 100)
+	reqChan := make(chan internal.CityReqMessage, 100)
 
 	go remoteDB.RunRDB(ctx, rdb, reqChan)
 

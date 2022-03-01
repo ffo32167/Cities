@@ -21,13 +21,13 @@ func New(cooldown time.Duration) *RemoteDB {
 	return &RemoteDB{data: d, Cooldown: cooldown}
 }
 
-func RunRDB(ctx context.Context, rdb *RemoteDB, reqChan <-chan internal.CityReq) {
+func RunRDB(ctx context.Context, rdb *RemoteDB, reqChan <-chan internal.CityReqMessage) {
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		case job := <-reqChan:
-			job.ChResp <- rdb.process(job.ID)
+			job.ResChan <- rdb.process(job.CityReq.ID)
 		}
 	}
 }

@@ -16,7 +16,7 @@ func New(port string) ApiServer {
 	return ApiServer{port: port}
 }
 
-func (as ApiServer) Run(logger *zap.Logger, cache *internal.CitiesCache, reqChan chan<- internal.CityReq) error {
+func (as ApiServer) Run(logger *zap.Logger, cache *internal.CitiesCache, reqChan chan<- internal.CityReqMessage) error {
 	ch := cityHandler.New(logger, cache, reqChan)
 	router := mux.NewRouter()
 	router.Handle("/", ch).Methods("GET")

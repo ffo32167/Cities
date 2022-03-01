@@ -11,10 +11,10 @@ import (
 type CityHandler struct {
 	log         *zap.Logger
 	citiesCache *internal.CitiesCache
-	reqChan     chan<- internal.CityReq
+	reqChan     chan<- internal.CityReqMessage
 }
 
-func New(log *zap.Logger, citiesCache *internal.CitiesCache, reqChan chan<- internal.CityReq) CityHandler {
+func New(log *zap.Logger, citiesCache *internal.CitiesCache, reqChan chan<- internal.CityReqMessage) CityHandler {
 	return CityHandler{log: log, citiesCache: citiesCache, reqChan: reqChan}
 }
 
