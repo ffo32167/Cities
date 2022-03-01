@@ -12,20 +12,32 @@ type CitiesCache struct {
 }
 
 type CityReq struct {
-	ID int
+	ID     int
+	ChResp chan CityResp
+}
+
+type CityResp struct {
+	City City
+	err  error
 }
 
 func New() *CitiesCache {
 	return &CitiesCache{Cities: make(map[int]string)}
 }
-func (citiesCache *CitiesCache) Get(CityReq CityReq, reqChan chan<- CityReq, resChan <-chan City) (City, error) {
+
+func (citiesCache *CitiesCache) Get(CityReq CityReq, reqChan chan<- CityReq) (c City, err error) {
 	citiesCache.Mx.Lock()
 	name, ok := citiesCache.Cities[CityReq.ID]
 	citiesCache.Mx.Unlock()
-	if !ok {
+	if ok {
+		c.ID = CityReq.ID
+		c.Name = name
+	} else {
+		resChan := make(chan CityResp, 1)
 		reqChan <- CityReq
-		city := <-resChan // изменить, смотреть на 27 минуте
-		name = city.Name
+		resp := <-resChan
+		c = resp.City
+		err = resp.err
 	}
-	return City{ID: CityReq.ID, Name: name}, nil
+	return c, err
 }

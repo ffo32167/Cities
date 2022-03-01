@@ -21,22 +21,23 @@ func New(cooldown time.Duration) *RemoteDB {
 	return &RemoteDB{data: d, Cooldown: cooldown}
 }
 
-func RunRDB(ctx context.Context, rdb *RemoteDB, reqChan <-chan internal.CityReq, resChan chan<- internal.City) {
+func RunRDB(ctx context.Context, rdb *RemoteDB, reqChan <-chan internal.CityReq) {
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		case job := <-reqChan:
-			resChan <- rdb.process(job)
+			job.ChResp <- rdb.process(job.ID)
 		}
 	}
 }
 
-func (rdb *RemoteDB) process(cityReq internal.CityReq) internal.City {
-	var city internal.City
-	if val, ok := rdb.data[cityReq.ID]; ok {
-		city = internal.City{ID: cityReq.ID, Name: val}
+func (rdb *RemoteDB) process(ID int) internal.CityResp {
+	var city internal.CityResp
+	if val, ok := rdb.data[ID]; ok {
+		city = internal.CityResp{City: internal.City{ID: ID, Name: val}}
 	}
+	// обработать ошибку не найдено
 	time.Sleep(rdb.Cooldown)
 	return city
 }

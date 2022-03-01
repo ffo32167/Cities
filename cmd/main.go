@@ -29,12 +29,11 @@ func main() {
 	rdb := remoteDB.New(1 * time.Second)
 	ctx, _ := context.WithCancel(context.TODO()) //cancel нужно будет добавить только при обвязке завершения программы os.Signal и всё вот это вот
 	reqChan := make(chan internal.CityReq, 100)
-	resChan := make(chan internal.City, 100)
 
-	go remoteDB.RunRDB(ctx, rdb, reqChan, resChan)
+	go remoteDB.RunRDB(ctx, rdb, reqChan)
 
 	server := http.New(":8080")
-	err = server.Run(logger, cityCache, reqChan, resChan)
+	err = server.Run(logger, cityCache, reqChan)
 	if err != nil {
 		logger.Error("cant start api server:", zap.Error(err))
 		os.Exit(1)

@@ -3,7 +3,7 @@ package cityHandler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ffo32167/test2/internal"
+	"github.com/ffo32167/cities/internal"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -12,11 +12,10 @@ type CityHandler struct {
 	log         *zap.Logger
 	citiesCache *internal.CitiesCache
 	reqChan     chan<- internal.CityReq
-	resChan     <-chan internal.City
 }
 
-func New(log *zap.Logger, citiesCache *internal.CitiesCache, reqChan chan<- internal.CityReq, resChan <-chan internal.City) CityHandler {
-	return CityHandler{log: log, citiesCache: citiesCache, reqChan: reqChan, resChan: resChan}
+func New(log *zap.Logger, citiesCache *internal.CitiesCache, reqChan chan<- internal.CityReq) CityHandler {
+	return CityHandler{log: log, citiesCache: citiesCache, reqChan: reqChan}
 }
 
 type CityRequest struct {
@@ -40,7 +39,7 @@ func (h CityHandler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	cityResp, err := h.citiesCache.Get(city.DecodeCityReq(), h.reqChan, h.resChan)
+	cityResp, err := h.citiesCache.Get(city.DecodeCityReq(), h.reqChan)
 
 	if err != nil {
 		h.log.Error("CityHandler: cant encode response:", zap.Error(err))
